@@ -3,7 +3,7 @@ STARLAB_TEMPLATE = dynamic
 STARLAB_DEPENDS = common
 
 # Dependencies
-#DEFINES += 
+DEFINES += EXPORTFLAG
 OTHER_FILES += *.prf
 
 HEADERS += \
