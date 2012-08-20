@@ -6,7 +6,7 @@
 /// Make this function valid only in this file
 namespace{
     bool isA(Model* model){
-        return qobject_cast<CurveskelModel*>(model);
+        return (qobject_cast<CurveskelModel*>(model)!=NULL);
     }
     CurveskelModel* safeCast(Model* model){
         CurveskelModel* _model = qobject_cast<CurveskelModel*>(model);
