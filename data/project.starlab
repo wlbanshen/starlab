@@ -1,0 +1,8 @@
+<!DOCTYPE StarlabProject>
+<StarlabProject>
+ <Layers>
+  <SurfaceMeshModel path="bunny.obj"/>
+  <SurfaceMeshModel path="torus.obj"/>
+  <SurfaceMeshModel path="tet.off"/>
+ </Layers>
+</StarlabProject>

@@ -1,5 +1,5 @@
 #pragma once
-#include "interfaces/SurfaceMeshModelPlugins.h"
+#include "SurfaceMeshPlugins.h"
 class surfacemesh_io_off : public SurfaceMeshInputOutputPlugin{
     Q_OBJECT
     Q_INTERFACES(InputOutputPlugin)

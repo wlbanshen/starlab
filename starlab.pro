@@ -1,7 +1,9 @@
 system(qmake -set QMAKEFEATURES $$PWD/starlab-core) #QT BUG
 
 TEMPLATE = subdirs
-CONFIG += ordered 
+CONFIG += ordered
+
+OTHER_FILES += starlab-core/starlab.prf
 
 #--- CORE LIBRARIES 
 SUBDIRS += starlab-core/libraries/parameters
@@ -18,5 +20,6 @@ SUBDIRS += starlab-core/plugins_core/project_io_starlab
 SUBDIRS += starlab-core/plugins_example
 
 #--- NEW LIBRARIES
+SUBDIRS += plugins_surfacemesh
 #SUBDIRS += plugins_curveskel
-#SUBDIRS += plugins_surfacemesh
+

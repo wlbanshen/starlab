@@ -1,6 +1,8 @@
 #include "surfacemesh_filter_normalize.h"
 #include "StarlabDrawArea.h"
 #include "SurfaceMeshTypes.h"
+#include "SurfaceMeshHelper.h"
+
 using namespace SurfaceMeshTypes;
 
 QString printBounding(QBox3D box){
@@ -13,29 +15,23 @@ QString printBounding(QBox3D box){
     return retval;
 }
 
-void surfacemesh_filter_normalize::applyFilter(SurfaceMeshModel *model, RichParameterSet *, StarlabDrawArea *drawArea){
-    SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
-    if(!mesh) throw StarlabException("FAIL");
-
-    qDebug() << "Old bounding box: " << printBounding(mesh->getBoundingBox());
-    /// Just to be sure... update it
-    mesh->updateBoundingBox();        
-    QBox3D bbox = mesh->getBoundingBox();
+void surfacemesh_filter_normalize::applyFilter(RichParameterSet*){
+    SurfaceMeshHelper helper( mesh() );
     
+    qDebug() << "Old bounding box: " << printBounding(mesh()->bbox());
+    
+    /// Just to be sure... update it
+    mesh()->updateBoundingBox();        
+    QBox3D bbox = mesh()->bbox();
     Vector3 offset = bbox.center();
     
-#if 0
-    /// Normalize to unit bounding
-    Scalar scale = bbox.size().length();
-#else
     /// Normalize to have longest side size = 1
     QVector3D s = bbox.size();
     Scalar scale = qMax(s.x(),qMax(s.y(),s.z()));
-#endif    
-        
-    Surface_mesh::Vertex_property<Point> points = mesh->get_vertex_property<Point>("v:point");
-    for (Surface_mesh::Vertex_iterator vit = mesh->vertices_begin(); vit != mesh->vertices_end(); ++vit){
-        Point& p = points[vit];
+ 
+    Vector3VertexProperty points = helper.getVector3VertexProperty("v:point");
+    foreach(Vertex v, mesh()->vertices()){
+        Point& p = points[v];
         p.x() -= offset.x();
         p.y() -= offset.y();
         p.z() -= offset.z();
@@ -45,10 +41,10 @@ void surfacemesh_filter_normalize::applyFilter(SurfaceMeshModel *model, RichPara
     }
     
     /// And update it after, so we can reset the viewpoint
-    mesh->updateBoundingBox();
-    if(drawArea) drawArea->resetView();
+    mesh()->updateBoundingBox();
+    if(drawArea()) drawArea()->resetViewport();
     
-    qDebug() << "New bounding box: " << printBounding(mesh->getBoundingBox());
+    qDebug() << "New bounding box: " << printBounding(mesh()->bbox());
 }
 
 Q_EXPORT_PLUGIN(surfacemesh_filter_normalize)

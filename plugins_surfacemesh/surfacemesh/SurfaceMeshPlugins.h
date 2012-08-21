@@ -11,8 +11,7 @@
 #include "SurfaceMeshTypes.h"
 using namespace SurfaceMeshTypes;
 
-class SurfaceMeshPlugin{
-protected:
+namespace{
     /// Is the given model a SurfaceMeshModel?
     bool isA(Model* model){ return qobject_cast<SurfaceMeshModel*>(model); }
     /// Safely convert to a surfacemesh
@@ -21,9 +20,9 @@ protected:
         if(!mesh) throw StarlabException("Model is not a SurfaceMeshModel");
         return mesh;
     }
-};
+}
 
-class SurfaceMeshInputOutputPlugin : public InputOutputPlugin, public SurfaceMeshPlugin{
+class SurfaceMeshInputOutputPlugin : public InputOutputPlugin{
 private: 
     void save(QString path, Model* model){ save(path,safeCast(model)); }
     bool isApplicable(Model* model){ return isA(model); }    
@@ -31,32 +30,22 @@ public:
     virtual void save(QString path, SurfaceMeshModel* model) = 0;
 };
 
-class SurfaceMeshRenderPlugin : public RenderPlugin, public SurfaceMeshPlugin{
-private:
+class SurfaceMeshRenderPlugin : public RenderPlugin{
+private: 
     bool isApplicable(Model* model){ return isA(model); }
-public:
+public: 
     SurfaceMeshModel* mesh(){ return safeCast(model()); }
 };
 
-#if 0
-class SurfaceMeshFilterPlugin : public SelectionFilterPlugin{
+class SurfaceMeshFilterPlugin : public FilterPlugin{
 public:
-    virtual void applyFilter(SurfaceMeshModel* /*mesh*/, RichParameterSet*, StarlabDrawArea* /*drawArea*/) = 0;
-    virtual void initParameters(SurfaceMeshModel* /*model*/, RichParameterSet* /*parameters*/, StarlabDrawArea* /*drawArea*/){}
-
+    SurfaceMeshModel* mesh(){ return safeCast(model()); }    
 private:
-    bool isApplicable(Model* model) { 
-        return isA(model); 
-    }
-    void initParameters(Model* model, RichParameterSet* parameters, StarlabDrawArea* drawArea){
-        initParameters(safeCast(model),parameters, drawArea); 
-    }
-    void applyFilter(Model* model, RichParameterSet* pars, StarlabDrawArea* drawArea){ 
-        applyFilter(safeCast(model), pars, drawArea); 
-    }
+    bool isApplicable(Model* model) { return isA(model); }
 };
 
-
+/// @todo re-enable decorators
+#if 0
 class SurfaceMeshDecoratePlugin : public DecoratePlugin{
 public:
     virtual void decorate(SurfaceMeshModel* model, StarlabDrawArea* /*parent*/, QPainter* /*p*/) = 0;
