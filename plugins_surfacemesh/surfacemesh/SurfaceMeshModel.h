@@ -2,7 +2,6 @@
 #include "dynamic_surfacemesh_global.h"
 
 #include <QDebug>
-#include <QDomElement>
 #include <QString>
 #include "Model.h"
 #include "StarlabException.h"

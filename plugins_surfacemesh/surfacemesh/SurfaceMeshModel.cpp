@@ -1,10 +1,10 @@
+#include <QTreeWidgetItem>
+
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshRenderer.h"
 #include "helpers/SurfaceMeshQForEachHelpers.h"
 
 SurfaceMeshModel::SurfaceMeshModel(QString path, QString name) : Model(path, name){
     /// Allocate rendering system
-    this->setRenderer( new SurfaceMeshRenderer() );
     this->color = Qt::darkGray;
 }
 
@@ -35,9 +35,9 @@ void SurfaceMeshModel::decorateLayersWidgedItem(QTreeWidgetItem* parent){
 void SurfaceMeshModel::updateBoundingBox(){
     Surface_mesh::Vertex_property<Point> points = this->get_vertex_property<Point>("v:point");
     Surface_mesh::Vertex_iterator vit, vend = this->vertices_end();    
-    bbox.setToNull();
+    _bbox.setToNull();
     for (vit = this->vertices_begin(); vit != vend; ++vit)
-        bbox.unite( points[vit] );
+        _bbox.unite( points[vit] );
 }
 
 SurfaceMeshForEachHalfedgeHelper SurfaceMeshModel::halfedges(){
