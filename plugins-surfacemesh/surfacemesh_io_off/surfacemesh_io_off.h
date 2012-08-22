@@ -7,5 +7,5 @@ class surfacemesh_io_off : public SurfaceMeshInputOutputPlugin{
 public:
     QString name() { return "[SurfaceMesh] Object File Format (*.off)"; }
     Model *open(QString path);
-    void save(QString path, SurfaceMeshModel *m);
+    void save(SurfaceMeshModel *m, QString path);
 };

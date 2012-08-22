@@ -24,10 +24,10 @@ namespace{
 
 class SurfaceMeshInputOutputPlugin : public InputOutputPlugin{
 private: 
-    void save(QString path, Model* model){ save(path,safeCast(model)); }
+    void save(Model* model,QString path){ save(safeCast(model),path); }
     bool isApplicable(Model* model){ return isA(model); }    
 public:
-    virtual void save(QString path, SurfaceMeshModel* model) = 0;
+    virtual void save(SurfaceMeshModel* model, QString path) = 0;
 };
 
 class SurfaceMeshRenderPlugin : public RenderPlugin{

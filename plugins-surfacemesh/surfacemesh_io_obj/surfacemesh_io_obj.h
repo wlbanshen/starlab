@@ -7,5 +7,5 @@ class surfacemesh_io_obj : public SurfaceMeshInputOutputPlugin{
 public:
     QString name() { return "[SurfaceMesh] Wavefront Object (*.obj)"; }
     Model* open(QString path);
-    void save(QString /*path*/, SurfaceMeshModel* /*model*/);
+    void save(SurfaceMeshModel*, QString);
 };

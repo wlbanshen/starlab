@@ -8,7 +8,7 @@ Model* surfacemesh_io_off::open(QString path){
     throw StarlabException("surfacemesh_io_off::open failed");
 }   
 
-void surfacemesh_io_off::save(QString path, SurfaceMeshModel* mesh){
+void surfacemesh_io_off::save(SurfaceMeshModel* mesh,QString path){
     bool success;
     if(mesh->garbage()){
         /// Save only works well with a garbage collected mesh... ~_~

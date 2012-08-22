@@ -8,7 +8,7 @@ Model* surfacemesh_io_obj::open(QString path){
     return model;
 }
 
-void surfacemesh_io_obj::save(QString path, SurfaceMeshModel* mesh){
+void surfacemesh_io_obj::save(SurfaceMeshModel* mesh,QString path){
     FILE* fid = fopen( qPrintable(path), "w" );
     if( fid == NULL ) throw StarlabException("the file cannot be opened");
     
@@ -27,7 +27,9 @@ void surfacemesh_io_obj::save(QString path, SurfaceMeshModel* mesh){
             fprintf(fid, "\n");
         }        
     }
+    
     qWarning() << "[WARNING] surfacemesh_io_obj::save() NEVER save normals";
+    fclose(fid);   
 
 #ifdef TODO_SAVE_WITH_NORMALS    
     if(has_vnormals){
