@@ -19,8 +19,8 @@ void surfacemesh_io_obj::save(QString path, SurfaceMeshModel* mesh){
         foreach(Vertex v, mesh->vertices())
             fprintf( fid, "v %.10f %.10f %.10f\n", p[v].x(), p[v].y(), p[v].z() );        
         foreach(Face f, mesh->faces()){
-            int nV = mesh->valence(f);
-            fprintf(fid, "f", nV);
+            // int nV = mesh->valence(f);
+            fprintf(fid, "f");
             Surface_mesh::Vertex_around_face_circulator fvit=mesh->vertices(f), fvend=fvit;
             do{ fprintf(fid, " %d", ((Surface_mesh::Vertex)fvit).idx()+1);
             } while (++fvit != fvend);

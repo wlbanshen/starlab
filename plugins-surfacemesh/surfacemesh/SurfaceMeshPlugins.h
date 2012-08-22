@@ -44,15 +44,11 @@ private:
     bool isApplicable(Model* model) { return isA(model); }
 };
 
-/// @todo re-enable decorators
 #if 0
 class SurfaceMeshDecoratePlugin : public DecoratePlugin{
 public:
-    virtual void decorate(SurfaceMeshModel* model, StarlabDrawArea* /*parent*/, QPainter* /*p*/) = 0;
+    SurfaceMeshModel* mesh(){ return safeCast(document()->selectedModel()); }    
 private:
     bool isApplicable(Model* model) { return isA(model); }
-    void decorate(Model* model, StarlabDrawArea* parent, QPainter* p){ 
-        return decorate(safeCast(model),parent,p); 
-    }
 };
 #endif

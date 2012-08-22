@@ -1,5 +1,5 @@
 #pragma once 
-#include "interfaces/SurfaceMeshModelPlugins.h"
+#include "SurfaceMeshPlugins.h"
 
 class surfacemesh_decorate_normals : public SurfaceMeshDecoratePlugin{
     Q_OBJECT
@@ -8,5 +8,5 @@ class surfacemesh_decorate_normals : public SurfaceMeshDecoratePlugin{
 public:
     virtual QString name() { return "Toggle show normals"; }
     virtual QString description() { return "Performs Skeletonization by Collapsing Mesh Structure"; }
-    void decorate(SurfaceMeshModel *mesh, StarlabDrawArea * /*parent*/, QPainter * /*p*/);
+    void decorate();
 };
