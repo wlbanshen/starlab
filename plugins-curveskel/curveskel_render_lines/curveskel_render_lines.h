@@ -1,5 +1,6 @@
 #pragma once
 #include "CurveskelPlugins.h"
+#include "CurveskelQForEach.h"
 
 class curveskel_render_lines : public CurveskelRenderPlugin{
     Q_OBJECT

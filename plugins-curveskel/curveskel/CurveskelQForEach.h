@@ -1,12 +1,12 @@
 #pragma once
 #include "CurveskelModel.h"
 
-class SkeletonForEachEdgeHelper{
+class CurveskelForEachEdgeHelper{
 private: 
     typedef CurveskelModel::Edge Edge;
     CurveskelModel* m;
 public:
-    SkeletonForEachEdgeHelper(CurveskelModel* _m):m(_m){}
+    CurveskelForEachEdgeHelper(CurveskelModel* _m):m(_m){}
     enum etype{BEGIN,END};
     class const_iterator{
     private:
@@ -26,12 +26,12 @@ public:
     const_iterator end() const{return const_iterator(m,END);}   
 };
 
-class SkeletonForEachVertexHelper{
+class CurveskelForEachVertexHelper{
 private: 
     typedef CurveskelModel::Vertex Vertex;
     CurveskelModel* m;
 public:
-    SkeletonForEachVertexHelper(CurveskelModel* _m):m(_m){}
+    CurveskelForEachVertexHelper(CurveskelModel* _m):m(_m){}
     enum etype{BEGIN,END};
     class const_iterator{
     private:

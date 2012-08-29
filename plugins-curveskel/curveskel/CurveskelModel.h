@@ -9,8 +9,8 @@
 
 /// @{ Forward declaration of helpers defined in helper/...
 ///    This reduces clutter of this class header
-class SkeletonForEachVertexHelper;
-class SkeletonForEachEdgeHelper;
+class CurveskelForEachVertexHelper;
+class CurveskelForEachEdgeHelper;
 /// @}
 
 using namespace CurveskelTypes;
@@ -25,7 +25,7 @@ public:
     
     /// @{ Qt foreach helpers
     public:
-        SkeletonForEachVertexHelper vertices(); 
-        SkeletonForEachEdgeHelper edges();
+        CurveskelForEachVertexHelper vertices();
+        CurveskelForEachEdgeHelper edges();
     /// @}
 };

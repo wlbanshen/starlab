@@ -79,4 +79,9 @@ Model* curveskel_io_skc::open(QString path){
     return model;
 }
 
+void curveskel_io_skc::save(CurveskelModel*, QString)
+{
+    throw StarlabException("Saving to 'skc' files is not implemented.");
+}
+
 Q_EXPORT_PLUGIN(curveskel_io_skc)

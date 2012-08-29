@@ -14,12 +14,12 @@ void CurveskelModel::updateBoundingBox(){
         _bbox.unite( vcoord[v] );
 }
 
-SkeletonForEachEdgeHelper CurveskelModel::edges(){ 
-    return SkeletonForEachEdgeHelper(this); 
+CurveskelForEachEdgeHelper CurveskelModel::edges(){
+    return CurveskelForEachEdgeHelper(this);
 }
-SkeletonForEachVertexHelper CurveskelModel::vertices(){ 
-    return SkeletonForEachVertexHelper(this); 
+CurveskelForEachVertexHelper CurveskelModel::vertices(){
+    return CurveskelForEachVertexHelper(this);
 }
 
-//Explicit Template Instantiation
+// Explicit Template Instantiation
 template class WingedgeMesh <double, CurveskelTypes::SkelVector<double,3> >;

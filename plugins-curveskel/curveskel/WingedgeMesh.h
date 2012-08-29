@@ -52,7 +52,7 @@ protected:
 
 
 template <class T>
-class Property_array : public Base_property_array
+class WingedgeProperty_array : public Base_property_array
 {
 public:
 
@@ -61,7 +61,7 @@ public:
     typedef typename vector_type::reference         reference;
     typedef typename vector_type::const_reference   const_reference;
 
-    Property_array(const std::string& name, T t=T()) : Base_property_array(name), value_(t) {}
+    WingedgeProperty_array(const std::string& name, T t=T()) : Base_property_array(name), value_(t) {}
 
 
 public: // virtual interface of Base_property_array
@@ -95,7 +95,7 @@ public: // virtual interface of Base_property_array
 
     virtual Base_property_array* clone() const
     {
-        Property_array<T>* p = new Property_array<T>(name_, value_);
+        WingedgeProperty_array<T>* p = new WingedgeProperty_array<T>(name_, value_);
         p->data_ = data_;
         return p;
     }
@@ -133,7 +133,7 @@ private:
 // specialization for bool properties
 template <>
 inline const bool*
-Property_array<bool>::data() const
+WingedgeProperty_array<bool>::data() const
 {
     assert(false);
     return NULL;
@@ -145,12 +145,12 @@ Property_array<bool>::data() const
 
 
 template <class T>
-class Property
+class WingedgeProperty
 {
 public:
 
-    typedef typename Property_array<T>::reference reference;
-    typedef typename Property_array<T>::const_reference const_reference;
+    typedef typename WingedgeProperty_array<T>::reference reference;
+    typedef typename WingedgeProperty_array<T>::const_reference const_reference;
 
     friend class Property_container;
     friend class Surface_mesh;
@@ -158,7 +158,7 @@ public:
 
 public:
 
-    Property(Property_array<T>* p=NULL) : parray_(p) {}
+    WingedgeProperty(WingedgeProperty_array<T>* p=NULL) : parray_(p) {}
 
     void reset()
     {
@@ -195,13 +195,13 @@ public:
 
 private:
 
-    Property_array<T>& array()
+    WingedgeProperty_array<T>& array()
     {
         assert(parray_ != NULL);
         return *parray_;
     }
 
-    const Property_array<T>& array() const
+    const WingedgeProperty_array<T>& array() const
     {
         assert(parray_ != NULL);
         return *parray_;
@@ -209,7 +209,7 @@ private:
 
 
 private:
-    Property_array<T>* parray_;
+    WingedgeProperty_array<T>* parray_;
 };
 
 
@@ -274,42 +274,42 @@ public:
 
 
     // add a property with name \c name and default value \c t
-    template <class T> Property<T> add(const std::string& name, const T t=T())
+    template <class T> WingedgeProperty<T> add(const std::string& name, const T t=T())
     {
-        Property_array<T>* p = new Property_array<T>(name, t);
+        WingedgeProperty_array<T>* p = new WingedgeProperty_array<T>(name, t);
         p->resize(size_);
         parrays_.push_back(p);
-        return Property<T>(p);
+        return WingedgeProperty<T>(p);
     }
 
 
     // get a property by its name. returns invalid property if it does not exist.
-    template <class T> Property<T> get(const std::string& name) const
+    template <class T> WingedgeProperty<T> get(const std::string& name) const
     {
         for (unsigned int i=0; i<parrays_.size(); ++i)
             if (parrays_[i]->name() == name)
-                return Property<T>(dynamic_cast<Property_array<T>*>(parrays_[i]));
-        return Property<T>();
+                return WingedgeProperty<T>(dynamic_cast<WingedgeProperty_array<T>*>(parrays_[i]));
+        return WingedgeProperty<T>();
     }
 
     // Verifies a property of given name & type exists
     template <class T> bool exists(const std::string& name)
     {     
-        Property<T> p = get<T>(name);
+        WingedgeProperty<T> p = get<T>(name);
         return bool(p);
     }
     
     // returns a property if it exists, otherwise it creates it first.
-    template <class T> Property<T> get_or_add(const std::string& name, const T t=T())
+    template <class T> WingedgeProperty<T> get_or_add(const std::string& name, const T t=T())
     {
-        Property<T> p = get<T>(name);
+        WingedgeProperty<T> p = get<T>(name);
         if (!p) p = add<T>(name, t);
         return p;
     }
 
 
     // delete a property
-    template <class T> void remove(Property<T>& h)
+    template <class T> void remove(WingedgeProperty<T>& h)
     {
         std::vector<Base_property_array*>::iterator it=parrays_.begin(), end=parrays_.end();
         for (; it!=end; ++it)
@@ -483,71 +483,71 @@ public: //------------------------------------------------------ property types
 
     /// Vertex property of type T
     /// \sa Halfedge_property, Edge_property, Face_property
-    template <class T> class Vertex_property : public Property<T>
+    template <class T> class Vertex_property : public WingedgeProperty<T>
     {
     public:
 
         /// default constructor
         explicit Vertex_property() {}
-        explicit Vertex_property(Property<T> p) : Property<T>(p) {}
+        explicit Vertex_property(WingedgeProperty<T> p) : WingedgeProperty<T>(p) {}
 
         /// access the data stored for vertex \c v
-        typename Property<T>::reference operator[](Vertex v)
+        typename WingedgeProperty<T>::reference operator[](Vertex v)
         {
-            return Property<T>::operator[](v.idx());
+            return WingedgeProperty<T>::operator[](v.idx());
         }
 
         /// access the data stored for vertex \c v
-        typename Property<T>::const_reference operator[](Vertex v) const
+        typename WingedgeProperty<T>::const_reference operator[](Vertex v) const
         {
-            return Property<T>::operator[](v.idx());
+            return WingedgeProperty<T>::operator[](v.idx());
         }
     };
 
     /// Edge property of type T
     /// \sa Vertex_property, Halfedge_property, Face_property
-    template <class T> class Edge_property : public Property<T>
+    template <class T> class Edge_property : public WingedgeProperty<T>
     {
     public:
 
         /// default constructor
         explicit Edge_property() {}
-        explicit Edge_property(Property<T> p) : Property<T>(p) {}
+        explicit Edge_property(WingedgeProperty<T> p) : WingedgeProperty<T>(p) {}
 
         /// access the data stored for edge \c e
-        typename Property<T>::reference operator[](Edge e)
+        typename WingedgeProperty<T>::reference operator[](Edge e)
         {
-            return Property<T>::operator[](e.idx());
+            return WingedgeProperty<T>::operator[](e.idx());
         }
 
         /// access the data stored for edge \c e
-        typename Property<T>::const_reference operator[](Edge e) const
+        typename WingedgeProperty<T>::const_reference operator[](Edge e) const
         {
-            return Property<T>::operator[](e.idx());
+            return WingedgeProperty<T>::operator[](e.idx());
         }
     };
 
 
     /// Face property of type T
     /// \sa Vertex_property, Halfedge_property, Edge_property
-    template <class T> class Face_property : public Property<T>
+    template <class T> class Face_property : public WingedgeProperty<T>
     {
     public:
 
         /// default constructor
         explicit Face_property() {}
-        explicit Face_property(Property<T> p) : Property<T>(p) {}
+        explicit Face_property(WingedgeProperty<T> p) : WingedgeProperty<T>(p) {}
 
         /// access the data stored for face \c f
-        typename Property<T>::reference operator[](Face f)
+        typename WingedgeProperty<T>::reference operator[](Face f)
         {
-            return Property<T>::operator[](f.idx());
+            return WingedgeProperty<T>::operator[](f.idx());
         }
 
         /// access the data stored for face \c f
-        typename Property<T>::const_reference operator[](Face f) const
+        typename WingedgeProperty<T>::const_reference operator[](Face f) const
         {
-            return Property<T>::operator[](f.idx());
+            return WingedgeProperty<T>::operator[](f.idx());
         }
     };
 
@@ -794,13 +794,13 @@ public: //-------------------------------------------- constructor / destructor
     ~WingedgeMesh(){}
         
     /// assign \c rhs to \c *this. performs a deep copy of all properties.
-    WingedgeMesh& operator=(const WingedgeMesh& rhs);
+    //WingedgeMesh& operator=(const WingedgeMesh& rhs);
 
     /// assign \c rhs to \c *this. does not copy custom properties.
-    WingedgeMesh& assign(const WingedgeMesh& rhs);
+    //WingedgeMesh& assign(const WingedgeMesh& rhs);
 
     /// assign \c rhs to \c *this. performs a shallow copy of all properties.
-    void shallow_copy(const WingedgeMesh& rhs);
+    //void shallow_copy(const WingedgeMesh& rhs);
     
     //@}
 
@@ -814,11 +814,11 @@ public: //------------------------------------------------------------- file IO
 
     /// read mesh from file \c filename. file extension determines file type.
     /// \sa write(const std::string& filename)
-    bool read(const std::string& filename);
+    //bool read(const std::string& filename);
 
     /// write mesh to file \c filename. file extensions determines file type.
     /// \sa read(const std::string& filename)
-    bool write(const std::string& filename) const;
+    //bool write(const std::string& filename) const;
 
     //@}
 
@@ -1103,7 +1103,7 @@ public: //---------------------------------------------- low-level connectivity
 
 public: //--------------------------------------------------- property handling
 
-    /// \name Property handling
+    /// \name WingedgeProperty handling
     //@{
 
     /** add a vertex property of type \c T with name \c name and default value \c t.
@@ -1532,9 +1532,9 @@ public: //--------------------------------------------------- helper functions
 
 	void reserve_delete()
 	{
-		if (!vdeleted_) vdeleted_ = vertex_property<bool>("v:deleted", false);
-		if (!edeleted_) edeleted_ = edge_property<bool>("e:deleted", false);
-		if (!fdeleted_) fdeleted_ = face_property<bool>("f:deleted", false);
+        if (!vdeleted_) vdeleted_ = vertex_property<bool>("v:deleted", false);
+        if (!edeleted_) edeleted_ = edge_property<bool>("e:deleted", false);
+        if (!fdeleted_) fdeleted_ = face_property<bool>("f:deleted", false);
 	}
 
 public:  //--------------------------------------------------- public helper functions

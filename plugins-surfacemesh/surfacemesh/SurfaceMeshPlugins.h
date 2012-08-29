@@ -9,6 +9,7 @@
 
 #include "SurfaceMeshModel.h"
 #include "SurfaceMeshTypes.h"
+
 using namespace SurfaceMeshTypes;
 
 namespace{

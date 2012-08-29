@@ -37,6 +37,8 @@ Model *curveskel_io_cg::open(QString path){
     int nVertices = 0, nEdges = 0;
     while (!file.eof()){
         getline(file, inputLine);
+		if(inputLine.length() < 1) continue;
+
         switch(inputLine[0]){
         case 'v':
             if(sscanf(inputLine.c_str(), "v %f %f %f", &x,&y,&z) == 3){
@@ -61,10 +63,8 @@ Model *curveskel_io_cg::open(QString path){
     return model;
 }
 
-void curveskel_io_cg::save(QString path, Model* model)
+void curveskel_io_cg::save(CurveskelModel* skel, QString path)
 {
-    CurveskelModel* skel = qobject_cast<CurveskelModel*>( model );
-    if(!skel) throw StarlabException("Must be a skeleton model");
     CurveskelModel::Vertex_property<CurveskelTypes::Point> pnts = skel->vertex_property<CurveskelTypes::Point>("v:point");
     skel->garbage_collection();
 

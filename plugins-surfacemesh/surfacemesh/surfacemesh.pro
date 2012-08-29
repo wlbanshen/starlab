@@ -22,7 +22,7 @@ HEADERS += SurfaceMeshModel.h \
     helpers/LocalAnalysisHelper.h \
     helpers/StatisticsHelper.h
  
-SOURCES += SurfaceMeshModel.cpp 
+SOURCES += SurfaceMeshModel.cpp
 
 # THESE ARE THE ONES OF THE REAL LIBRARY
 HEADERS += geometry/Vector.h
@@ -37,3 +37,6 @@ SOURCES += surface_mesh/IO_stl.cpp
 SOURCES += surface_mesh/IO_obj.cpp
 SOURCES += surface_mesh/IO_off.cpp
 SOURCES += surface_mesh/Surface_mesh.cpp
+
+# Windows specific
+win32: DEFINES += _CRT_SECURE_NO_WARNINGS # disable 'unsafe' warnings

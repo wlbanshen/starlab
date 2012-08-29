@@ -1,6 +1,7 @@
 #pragma once
 #include "CurveskelModel.h"
 #include "interfaces/InputOutputPlugin.h"
+#include "interfaces/FilterPlugin.h"
 #include "interfaces/RenderPlugin.h"
 
 /// Make this function valid only in this file
@@ -15,13 +16,24 @@ namespace{
     }
 }
 
-class SkeletonInputOutputPlugin : public InputOutputPlugin{
-private: 
+class CurveskelInputOutputPlugin : public InputOutputPlugin{
+private:
+    void save(Model* model,QString path){ save(safeCast(model),path); }
     bool isApplicable(Model* model){ return isA(model); }
+public:
+    virtual void save(CurveskelModel* model, QString path) = 0;
 };
 
+class CurveskelFilterPlugin : public FilterPlugin{
+public:
+    CurveskelModel* skel(){ return safeCast(model()); }
+private:
+    bool isApplicable(Model* model) { return isA(model); }
+};
 
 class CurveskelRenderPlugin : public RenderPlugin{
 private:
     bool isApplicable(Model* model){ return isA(model); }
+protected:
+	CurveskelModel* skel() { return safeCast(model()); }
 };
