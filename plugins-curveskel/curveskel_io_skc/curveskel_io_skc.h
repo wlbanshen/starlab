@@ -1,7 +1,7 @@
 #pragma once
 #include "CurveskelPlugins.h"
  
-class curveskel_io_skc : public SkeletonInputOutputPlugin{
+class curveskel_io_skc : public CurveskelInputOutputPlugin{
     Q_OBJECT
     Q_INTERFACES(InputOutputPlugin)
     

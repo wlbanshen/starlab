@@ -15,4 +15,7 @@ public:
     QIcon icon(){ return QIcon(":/surfacemesh_render_smooth.png"); }
     void init();
     void render();
+
+protected:
+    virtual bool isDefault() { return true; }
 };

@@ -20,4 +20,7 @@ public:
         std::vector<unsigned int>  triangles; ///< index array for buffered OpenGL rendering 
         std::vector<unsigned int>  edges;     ///< index array for buffered OpenGL rendering
     /// @}
+
+protected:
+    virtual bool isDefault() { return true; }
 };
