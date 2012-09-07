@@ -5,6 +5,7 @@
 #include "interfaces/InputOutputPlugin.h"
 #include "interfaces/DecoratePlugin.h"
 #include "interfaces/FilterPlugin.h"
+#include "interfaces/ModePlugin.h"
 #include "interfaces/RenderPlugin.h"
 
 #include "SurfaceMeshModel.h"
@@ -43,6 +44,13 @@ public:
     SurfaceMeshModel* mesh(){ return safeCast(model()); }    
 private:
     bool isApplicable(Model* model) { return isA(model); }
+};
+
+class SurfaceMeshModePlugin : public ModePlugin{
+public:
+    SurfaceMeshModel* mesh(){ return safeCast(model()); }
+private:
+    bool isApplicable(Document* document) { return isA(document->selectedModel()); }
 };
 
 #if 0
