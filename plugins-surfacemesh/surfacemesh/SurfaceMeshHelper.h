@@ -16,7 +16,7 @@ namespace SurfaceMeshTypes{
         const string VAREA = "v:area";
         const string ELENGTH = "e:length";
         const string VQUALITY = "v:quality";
-        const string FAREA="f:area";
+        const string FAREA = "f:area";
         const string FBARYCENTER="f:barycenter";
     /// @}
 
@@ -30,7 +30,8 @@ namespace SurfaceMeshTypes{
     typedef Surface_mesh::Face_property<Scalar>     ScalarFaceProperty;
     typedef Surface_mesh::Face_property<Vector3>    Vector3FaceProperty;
     typedef Surface_mesh::Edge_property<bool>       BoolEdgeProperty;    
-    typedef Surface_mesh::Vertex_property<bool>     BoolVertexProperty;    
+    typedef Surface_mesh::Vertex_property<bool>     BoolVertexProperty;
+	typedef Surface_mesh::Face_property<bool>       BoolFaceProperty;
     typedef Surface_mesh::Edge_property<Scalar>     ScalarEdgeProperty;    
     typedef Surface_mesh::Halfedge_property<Scalar> ScalarHalfedgeProperty;
 }
@@ -42,6 +43,7 @@ protected:
     ScalarVertexProperty  varea;  /// NULL
     Vector3VertexProperty vnormal; /// NULL
     Vector3FaceProperty   fnormal; /// NULL
+	ScalarFaceProperty   farea; /// NULL
     ScalarEdgeProperty    elenght;  /// NULL
     
 public:
@@ -49,7 +51,8 @@ public:
         points = mesh->vertex_property<Point>("v:point");
         vnormal = mesh->get_vertex_property<Vector3>(VNORMAL);
         varea = mesh->get_vertex_property<Scalar>(VAREA);
-        fnormal = mesh->get_face_property<Vector3>(FNORMAL);        
+        fnormal = mesh->get_face_property<Vector3>(FNORMAL);  
+		farea = mesh->get_face_property<Scalar>(FAREA);  
         elenght = mesh->get_edge_property<Scalar>(ELENGTH);
     }
     
@@ -89,6 +92,24 @@ public:
                 fnormal[fit] = mesh->compute_face_normal(fit);
         return fnormal;
     }
+
+	Surface_mesh::Face_property<Scalar> computeFaceAreas(string property=FAREA){
+		farea = mesh->face_property<Scalar>(property);
+
+		Surface_mesh::Face_iterator fit, fend=mesh->faces_end();
+		Surface_mesh::Vertex_around_face_circulator vit, vend;
+		QVector<Vector3> pnts;
+
+		for (fit=mesh->faces_begin(); fit!=fend; ++fit){
+			// Collect points of face
+			pnts.clear(); vit = vend = mesh->vertices(fit);
+			do{ pnts.push_back(points[vit]); } while(++vit != vend);
+
+			farea[fit] = 0.5 * cross((pnts[1] - pnts[0]),(pnts[2] - pnts[0])).norm();
+		}
+
+		return farea;
+	}
     
     ScalarEdgeProperty computeEdgeLengths(string property=ELENGTH){
         elenght = mesh->edge_property<Scalar>(property,0.0f);

@@ -83,6 +83,7 @@ void surfacemesh_render_flatwire::render_flat(){
 }
 
 void surfacemesh_render_flatwire::render_wire(){
+    glLineWidth(1.0);
     glColor3f(.3f,.3f,.3f);
     Surface_mesh::Vertex_property<Point> points = mesh()->vertex_property<Point>("v:point");
     gl::glVertexPointer(points.data());
