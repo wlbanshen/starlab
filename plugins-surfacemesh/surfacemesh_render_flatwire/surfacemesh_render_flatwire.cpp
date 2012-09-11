@@ -93,7 +93,7 @@ void surfacemesh_render_flatwire::render_wire(){
     glColor3f(0.0, 0.0, 0.0);
     glDepthRange(0.0, 1.0);
     glDepthFunc(GL_LEQUAL);
-    glDrawElements(GL_LINES, (GLsizei)edges.size(), GL_UNSIGNED_INT, &edges[0]);
+    if(edges.size()) glDrawElements(GL_LINES, (GLsizei)edges.size(), GL_UNSIGNED_INT, &edges[0]);
     glDepthFunc(GL_LESS);
 }
 
