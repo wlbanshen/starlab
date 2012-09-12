@@ -48,7 +48,7 @@ private:
 
 class SurfaceMeshModePlugin : public ModePlugin{
 public:
-    SurfaceMeshModel* mesh(){ return safeCast(model()); }
+    SurfaceMeshModel* mesh(){ return safeCast(document()->selectedModel()); }
 private:
     bool isApplicable(Document* document) { return isA(document->selectedModel()); }
 };
