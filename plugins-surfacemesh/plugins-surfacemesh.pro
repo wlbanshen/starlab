@@ -19,3 +19,6 @@ SUBDIRS += surfacemesh_render_transparent
 SUBDIRS += surfacemesh_filter_normalize
 #SUBDIRS += surfacemesh_decorate_normals
 #SUBDIRS += surfacemesh_filter_au_skeleton
+
+# Mode Plugins
+SUBDIRS += surfacemesh_mode_info
