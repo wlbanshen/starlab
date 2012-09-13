@@ -22,3 +22,4 @@ SUBDIRS += surfacemesh_filter_normalize
 
 # Mode Plugins
 SUBDIRS += surfacemesh_mode_info
+SUBDIRS += surfacemesh_mode_arapdeform
