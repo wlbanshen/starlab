@@ -444,17 +444,10 @@ void surfacemesh_mode_info::drawItemInfo()
 		{
 			// Position
 			Vertex v(selectedIdx);
-			QString pos = QString("%1\t%2\t%3").arg(points[v][0]).arg(points[v][1]).arg(points[v][2]);
-
-			// Normal
-			Vector3VertexProperty normals = mesh()->get_vertex_property<Vector3>(VNORMAL);
-			QString normal = QString("%1\t%2\t%3").arg(normals[v][0]).arg(normals[v][1]).arg(normals[v][2]);
 
 			log += QString("Vertex (%1)\n").arg(v.idx());
 			log += QString("\tValence    %1\n").arg(mesh()->valence(v));
-			log += QString("\tBoundry    %1\n").arg(mesh()->is_boundary(v));
-			log += QString("\tPosition   %1\n").arg(pos);
-			log += QString("\tNormal     %1\n").arg(normal);
+            log += QString("\tBoundry    %1\n").arg(mesh()->is_boundary(v));
 			
 			// Properties
 			foreach(std::string pname, mesh()->vertex_properties()){
@@ -470,6 +463,10 @@ void surfacemesh_mode_info::drawItemInfo()
 				// Double properties
 				Surface_mesh::Vertex_property<double> dbl = mesh()->get_vertex_property<double>(pname);
 				if(dbl.is_valid()) log += QString("\n(%1)\t%2").arg(property_name).arg(dbl[v]);
+
+                // Vector properties
+                Surface_mesh::Vertex_property<Vector3> vctr = mesh()->get_vertex_property<Vector3>(pname);
+                if(vctr.is_valid()) log += QString("\n(%1)\t%2\t%3\t%4").arg(property_name).arg(vctr[v][0]).arg(vctr[v][1]).arg(vctr[v][2]);
 			}
 		}
 		break;
@@ -478,8 +475,7 @@ void surfacemesh_mode_info::drawItemInfo()
 			Face f(selectedIdx);
 
 			// Center & normal
-			QString center = QString("%1\t%2\t%3").arg(faceCenters[f][0]).arg(faceCenters[f][1]).arg(faceCenters[f][2]);
-			QString normal = QString("%1\t%2\t%3").arg(faceNormals[f][0]).arg(faceNormals[f][1]).arg(faceNormals[f][2]);
+            QString center = QString("%1\t%2\t%3").arg(faceCenters[f][0]).arg(faceCenters[f][1]).arg(faceCenters[f][2]);
 
 			// Collect points
 			QVector<Vector3> pnts; 
@@ -504,8 +500,7 @@ void surfacemesh_mode_info::drawItemInfo()
 			log += QString("\tValence    %1\n").arg(mesh()->valence(f));
 			log += QString("\tBoundry    %1\n").arg(mesh()->is_boundary(f));
 			log += QString("\tArea       %1\n").arg(faceAreas[f]);
-			log += QString("\tCenter     %1\n").arg(center);
-			log += QString("\tNormal     %1\n").arg(normal);
+            log += QString("\tCenter     %1\n").arg(center);
 			log += QString("\tAngle      %1\n").arg(QString("min  %1\tmax  %2").arg(DEGREES(minAngle),3).arg(DEGREES(maxAngle),3));
 
 			// Properties
@@ -522,6 +517,10 @@ void surfacemesh_mode_info::drawItemInfo()
 				// Double properties
 				Surface_mesh::Face_property<double> dbl = mesh()->get_face_property<double>(pname);
 				if(dbl.is_valid()) log += QString("\n(%1)\t%2").arg(property_name).arg(dbl[f]);
+
+                // Vector properties
+                Surface_mesh::Face_property<Vector3> vctr = mesh()->get_face_property<Vector3>(pname);
+                if(vctr.is_valid()) log += QString("\n(%1)\t%2\t%3\t%4").arg(property_name).arg(vctr[f][0]).arg(vctr[f][1]).arg(vctr[f][2]);
 			}
 		}
 		break;
