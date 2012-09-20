@@ -28,6 +28,8 @@ void geodistance::applyFilter(RichParameterSet *pars)
     ScalarVertexProperty distance = uniformDistance(src);
 
     // Visualize distance on vertices
+    drawArea()->deleteAllRenderObjects();
+
     if( pars->getBool("visualizeDistance") )
     {
         PointSoup * ps = new PointSoup;
@@ -35,8 +37,6 @@ void geodistance::applyFilter(RichParameterSet *pars)
 
         foreach(Vertex v, mesh()->vertices())
             ps->addPoint( points[v], qtJetColorMap(1.0 - distance[v]) );
-
-        drawArea()->deleteAllRenderObjects();
         drawArea()->addRenderObject(ps);
     }
 }

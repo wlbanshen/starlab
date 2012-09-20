@@ -7,9 +7,9 @@
 #include <Eigen/CholmodSupport>
 using namespace Eigen;
 typedef CholmodSupernodalLLT< SparseMatrix<double> > CholmodSolver;
-typedef SimplicialCholesky< SparseMatrix<double> > CholeskySolver;
 
 #define qRanged(min, v, max) ( qMax(min, qMin(v, max)) )
+#define EPSILON 1e-12
 
 class GeoHeatHelper : public SurfaceMeshHelper{
 
@@ -42,9 +42,16 @@ public:
     {
         // t = (avg edge length) ^ 2
         double avg = 0.0;
-        foreach(Edge e, mesh->edges())
-            avg += elenght[e];
-        avg /= mesh->n_edges();
+        int count = 0;
+
+        foreach(Edge e, mesh->edges()){
+            if(elenght[e] > 0.0){
+                avg += elenght[e];
+                count++;
+            }
+        }
+
+        avg /= count;
         return avg * avg;
     }
 
@@ -68,7 +75,7 @@ public:
         std::vector< T > A_elements;
 
         foreach(Vertex v, mesh->vertices())
-            A_elements.push_back( T(v.idx(), v.idx(), varea[v]) );
+            A_elements.push_back( T(v.idx(), v.idx(), qMax(varea[v], EPSILON) ) );
 
         SparseMatrix<Scalar> matA(mesh->n_vertices(), mesh->n_vertices());
         matA.setFromTriplets(A_elements.begin(), A_elements.end());
@@ -94,14 +101,14 @@ public:
             Vertex v_b = mesh->to_vertex(mesh->next_halfedge(mesh->halfedge(e, 1)));
             if(has_halfedge(v_b, vi)) cot_beta  = dot(points[vi]-points[v_b], points[vj]-points[v_b]) / cross(points[vi]-points[v_b], points[vj]-points[v_b]).norm();
 
-            Scalar cots = 0.5 * (cot_alpha + cot_beta);
+            Scalar cots = (0.5 * (cot_alpha + cot_beta));
 
             if(abs(cots) == 0) continue;
 
             L_c.push_back(T(vi.idx(), vj.idx(), -cots));
             L_c.push_back(T(vj.idx(), vi.idx(), -cots));
-            L_c.push_back(T(vi.idx(), vi.idx(), cots));
-            L_c.push_back(T(vj.idx(), vj.idx(), cots));
+            L_c.push_back(T(vi.idx(), vi.idx(), cots + EPSILON));
+            L_c.push_back(T(vj.idx(), vj.idx(), cots + EPSILON));
 
             // Just for record
             vcot[vi] += cots;

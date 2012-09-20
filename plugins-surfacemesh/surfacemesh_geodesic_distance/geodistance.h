@@ -32,6 +32,5 @@ private:
     SparseMatrix<Scalar>    Lc;
     VectorXd                u0;
 
-    CholmodSolver heat_flow;
-    CholeskySolver poisson_solver; // todo: figure out why we can't use same solver
+    CholmodSolver heat_flow, poisson_solver;
 };
