@@ -487,7 +487,7 @@ void surfacemesh_mode_info::drawItemInfo()
 			do{ pnts.push_back(points[vit]); } while(++vit != vend);
 
 			// Compute angle stats of face
-			double minAngle(DBL_MAX), maxAngle(DBL_MIN);
+			double minAngle(DBL_MAX), maxAngle(-DBL_MAX);
 			Surface_mesh::Halfedge_around_face_circulator h(mesh(), f), eend = h;
 			do{ 
 				Vector3 a = points[mesh()->to_vertex(h)];
