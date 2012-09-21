@@ -1,6 +1,8 @@
 #pragma once
 #include "SurfaceMeshHelper.h"
 
+static uint qHash( const Vertex &key ){return qHash(key.idx()); }
+
 // Eigne matrix library
 #include <Eigen/Core>
 #include <Eigen/Sparse>
@@ -55,7 +57,7 @@ public:
         return avg * avg;
     }
 
-    VectorXd u0(const QVector<Vertex> & vidx)
+    VectorXd u0(const QSet<Vertex> & vidx)
     {
         mesh->remove_vertex_property(vfunction);
         vfunction = mesh->vertex_property<Scalar> ("v:function", 0);

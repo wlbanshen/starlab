@@ -6,8 +6,6 @@ void geodistance::initParameters(RichParameterSet *pars)
 {
     pars->addParam(new RichInt("sourceVertex", 0, "Source vertex"));
     pars->addParam(new RichBool("visualizeDistance", true, "Visualize Distance"));
-
-    h = NULL;
 }
 
 void geodistance::precompute()
@@ -23,14 +21,24 @@ void geodistance::precompute()
 
 void geodistance::applyFilter(RichParameterSet *pars)
 {
-    QVector<Vertex> src(1,Vertex(pars->getInt("sourceVertex")));
+    QSet<Vertex> src;
+    if(pars)
+        src.insert(Vertex(pars->getInt("sourceVertex")));
+    else
+    {
+        // Source points are tagged on mesh vertices
+        BoolVertexProperty src_points = mesh()->get_vertex_property<bool>("v:geo_src_points");
+        if(!src_points.is_valid()) return;
+        foreach(Vertex v, mesh()->vertices())
+            if(src_points[v]) src.insert(v);
+    }
 
     ScalarVertexProperty distance = uniformDistance(src);
 
     // Visualize distance on vertices
     drawArea()->deleteAllRenderObjects();
 
-    if( pars->getBool("visualizeDistance") )
+    if(pars && pars->getBool("visualizeDistance"))
     {
         PointSoup * ps = new PointSoup;
         Vector3VertexProperty points = h->getVector3VertexProperty(VPOINT);
@@ -41,7 +49,7 @@ void geodistance::applyFilter(RichParameterSet *pars)
     }
 }
 
-ScalarVertexProperty geodistance::uniformDistance(const QVector<Vertex> & source)
+ScalarVertexProperty geodistance::uniformDistance(const QSet<Vertex> & source)
 {
     if(!h) precompute();
 

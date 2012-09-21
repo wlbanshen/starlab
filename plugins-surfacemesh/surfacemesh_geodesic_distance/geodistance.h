@@ -13,6 +13,7 @@ class geodistance : public SurfaceMeshFilterPlugin{
     Q_INTERFACES(FilterPlugin)
 
 public:
+    geodistance() { h = NULL; }
     ~geodistance(){ delete h; }
     QString name() { return "Geodesic distance"; }
     QString description() { return "Compute geo-distance."; }
@@ -21,9 +22,9 @@ public:
     void applyFilter(RichParameterSet* pars);
 
     void precompute();
-    void setSource(const QVector<Vertex> &fromVerts);
+    void setSource(const QSet<Vertex> &fromVerts);
 
-    ScalarVertexProperty uniformDistance(const QVector<Vertex> &source);
+    ScalarVertexProperty uniformDistance(const QSet<Vertex> &source);
 
 private:
     GeoHeatHelper*          h;

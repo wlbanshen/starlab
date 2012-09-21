@@ -11,4 +11,7 @@ public:
 private:
     Ui::arap_dialog *ui;
     surfacemesh_mode_arapdeform *mode;
+
+public slots:
+    void anchorModeChanged(int newMode);
 };
