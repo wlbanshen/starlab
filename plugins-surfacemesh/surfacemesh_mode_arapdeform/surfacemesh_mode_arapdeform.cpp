@@ -123,28 +123,6 @@ bool surfacemesh_mode_arapdeform::keyPressEvent(QKeyEvent *)
 
 void surfacemesh_mode_arapdeform::decorate()
 {
-    glColor3d(1,1,1);
-
-    QString info = "";
-
-    switch(currentMode){
-        case CONTROL_FACES: info += "Mode: Control points"; break;
-        case ANCHOR_FACES: info += "Mode: Anchor points"; break;
-        case DEFORM:
-        {
-            info += "Mode: Deform";
-            drawHandle();
-            break;
-        }
-    }
-
-    switch(anchorMode){
-        case MANUAL_POINTS: info += ", manual anchor"; break;
-        case GEODESIC_DISTANCE: info += ", distance anchors = " + QString::number(anchorDistance); break;
-    }
-
-    drawArea()->drawText(50,50, info);
-
     glEnable(GL_LIGHTING);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(-10, 10);
@@ -185,6 +163,29 @@ void surfacemesh_mode_arapdeform::decorate()
         DrawCircle(cursorPos.x(), cursorPos.y(), brushSize);
         drawArea()->stopScreenCoordinatesSystem();
     }
+
+    QString info = "";
+
+    switch(currentMode){
+        case CONTROL_FACES: info += "Mode: Control points"; break;
+        case ANCHOR_FACES: info += "Mode: Anchor points"; break;
+        case DEFORM:
+        {
+            info += "Mode: Deform";
+            drawHandle();
+            break;
+        }
+    }
+
+    switch(anchorMode){
+        case MANUAL_POINTS: info += ", manual anchor"; break;
+        case GEODESIC_DISTANCE: info += ", distance anchors = " + QString::number(anchorDistance); break;
+    }
+
+    glColor4d(1,1,1,1);
+    drawArea()->drawText(50,50, info);
+
+    glEnable(GL_LIGHTING);
 }
 
 void surfacemesh_mode_arapdeform::drawHandle()
@@ -222,8 +223,15 @@ void surfacemesh_mode_arapdeform::drawHandle()
 
 void surfacemesh_mode_arapdeform::drawWithNames()
 {
+    double vt = 0;
+
+    Vec viewDir = drawArea()->camera()->viewDirection().unit();
+    Vector3 cameraNormal(viewDir[0],viewDir[1],viewDir[2]);
+
     foreach(Face f, mesh()->faces())
     {
+        if(dot(fnormals[f], cameraNormal) > vt) continue;
+
         glPushName(f.idx());
         glBegin(GL_POLYGON);
         Surface_mesh::Vertex_around_face_circulator vit, vend;
@@ -294,8 +302,14 @@ void surfacemesh_mode_arapdeform::initDeform()
 
     handleCenter /= cpoints.size();
 
+    double radius = 0;
+    foreach(Vertex v, cpoints){
+        double d = (points[v] - handleCenter).norm();
+        if(d > radius) radius = d;
+    }
+
     // setup deformation handle
-    deform_handle = new ARAPDeformerHandle( handleCenter );
+    deform_handle = new ARAPDeformerHandle( handleCenter, radius );
     drawArea()->setManipulatedFrame( deform_handle );
     this->connect(deform_handle, SIGNAL(manipulated()), SLOT(Deform()));
 }
