@@ -525,6 +525,14 @@ public: //---------------------------------------------------- circulator types
             assert(mesh_);
             return mesh_->to_vertex(halfedge_);
         }
+        
+        /// dereferencing operator, similar to cast above
+        /// @note new addition to Surface_mesh
+        Vertex operator*() const
+        {
+            assert(mesh_);
+            return mesh_->to_vertex(halfedge_);
+        }
 
         /// cast to bool: true if vertex is not isolated
         operator bool() const { return halfedge_.is_valid(); }

@@ -69,8 +69,7 @@ void ARAPDeformer::ComputeCotWeights()
 	}
 }
 
-void ARAPDeformer::BuildAndFactor()
-{
+void ARAPDeformer::BuildAndFactor(){
 	ComputeCotWeights();
 
 	// Initialize
@@ -94,7 +93,7 @@ void ARAPDeformer::BuildAndFactor()
         {
 			vvit = vvend = mesh->vertices(vit);	
 			do{
-				int j = Surface_mesh::Vertex(vvit).idx();
+                int j = (*vvit).idx();
                 weight += wij_weight[vit][vvit];
                 L.push_back(T(i, j, -wij_weight[vit][vvit]));
 			} while(++vvit != vvend);
@@ -131,7 +130,7 @@ void ARAPDeformer::SVDRotation()
         vvit = vvend = mesh->vertices(vit);
         do{
             // eij = pi - pj, pi is v_it, pj is vv_it, including weights wij
-            int j = Surface_mesh::Vertex(vvit).idx();
+            int j = (*vvit).idx();
 
             P.col(degree) = (OrigMesh[i] - OrigMesh[j]) * wij_weight[vit][vvit];
             Q.col(degree++) = (	Vector3d(xyz[0][i], xyz[1][i], xyz[2][i]) -
@@ -178,7 +177,7 @@ void ARAPDeformer::Deform( int ARAPIteration /*= 1*/ )
 				// Collect neighbors
 				vvit = vvend = mesh->vertices(vit);	
 				do{ 
-					int j = Surface_mesh::Vertex(vvit).idx();
+                    int j = (*vvit).idx();
 
 					Vector3d pij = OrigMesh[i] - OrigMesh[j];
 					Vector3d RijPijMat = ((R[i] + R[j]) * pij);
