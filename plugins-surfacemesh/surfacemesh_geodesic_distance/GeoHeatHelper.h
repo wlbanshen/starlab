@@ -1,5 +1,6 @@
 #pragma once
 #include "SurfaceMeshHelper.h"
+#include <float.h>
 
 static uint qHash( const Vertex &key ){return qHash(key.idx()); }
 
@@ -228,6 +229,9 @@ public:
 
     void cleanUp(bool isAll = false)
     {
+        ScalarVertexProperty heat  = getScalarVertexProperty("v:heat_distance");
+        ScalarVertexProperty udist = getScalarVertexProperty("v:uniformDistance");
+                
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
         fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0));
 
@@ -237,9 +241,8 @@ public:
         mesh->remove_vertex_property(vfunction);
         mesh->remove_edge_property(ecot);
         mesh->remove_face_property(fgradient);
-        mesh->remove_vertex_property(getScalarVertexProperty("v:heat_distance"));
-
-        if(isAll)
-            mesh->remove_vertex_property(getScalarVertexProperty("v:uniformDistance"));
+        mesh->remove_vertex_property(heat);
+        
+        if(isAll) mesh->remove_vertex_property(udist);
     }
 };
