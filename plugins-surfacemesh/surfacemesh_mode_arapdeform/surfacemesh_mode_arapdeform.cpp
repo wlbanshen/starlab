@@ -3,6 +3,9 @@
 #include "StarlabDrawArea.h"
 #include "arap_globals.h"
 
+static uint qHash( const Face &key ){return qHash(key.idx()); }
+static uint qHash( const Vertex &key ){return qHash(key.idx()); }
+
 surfacemesh_mode_arapdeform::surfacemesh_mode_arapdeform()
 {
     dialog = new arap_dialog(this);
@@ -67,6 +70,8 @@ void surfacemesh_mode_arapdeform::endSelection(const QPoint &)
                 if(selectMode == ADD) {anchorFaces.insert(f); controlFaces.remove(f);  }
                 if(selectMode == REMOVE) anchorFaces.remove(f);
                 break;
+            case DEFORM:
+                break;
         }
     }
 }
@@ -110,6 +115,7 @@ bool surfacemesh_mode_arapdeform::mouseMoveEvent(QMouseEvent * e)
             drawArea()->select(e->pos());
             isDrawBrushSize = true;
         break;
+        case DEFORM: break;            
     }
 
     drawArea()->updateGL();

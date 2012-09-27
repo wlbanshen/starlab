@@ -11,9 +11,6 @@ enum SELECT_MODE{ADD, REMOVE, NONE};
 enum ARAP_MODE{CONTROL_FACES, ANCHOR_FACES, DEFORM};
 enum ANCHOR_MODE{MANUAL_POINTS, GEODESIC_DISTANCE};
 
-static uint qHash( const Face &key ){return qHash(key.idx()); }
-static uint qHash( const Vertex &key ){return qHash(key.idx()); }
-
 class surfacemesh_mode_arapdeform : public SurfaceMeshModePlugin{
     Q_OBJECT
     Q_INTERFACES(ModePlugin)
