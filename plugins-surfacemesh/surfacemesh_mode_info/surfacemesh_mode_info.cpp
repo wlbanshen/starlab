@@ -397,7 +397,10 @@ void surfacemesh_mode_info::drawSelectedItem()
 
 		}
 		break;
-
+        
+    case HDGE_IDX:
+        break;
+        
 	case EDGE_IDX:
 		{
 			Edge e(selectedIdx);
