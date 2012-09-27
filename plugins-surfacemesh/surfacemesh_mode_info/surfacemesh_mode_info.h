@@ -41,14 +41,15 @@ class surfacemesh_mode_info : public SurfaceMeshModePlugin{
 	ScalarEdgeProperty elengs;
 
 	DrawElementType selectedType;
-	int selectedIdx;
+    int selectedIdx;
+    int correctIndex(int i);
 
 	QVector<bool> visualize;
 
 public:
 	virtual bool keyReleaseEvent(QKeyEvent* event);
 	virtual bool keyPressEvent (QKeyEvent* event);
-	void update();
+    void update();
 };
 
 // Utility

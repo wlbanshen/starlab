@@ -60,6 +60,11 @@ SurfaceMeshForEachOneRingEdgesHelper SurfaceMeshModel::onering_hedges(Surface_me
     return SurfaceMeshForEachOneRingEdgesHelper(this,v);
 }
 
+void SurfaceMeshModel::remove_vertex(Vertex v){
+	this->vdeleted_[v] = true;
+	this->garbage_ = true;
+}
+
 QDebug operator<< (QDebug d, const Surface_mesh::Edge& edge) {
     d.nospace() << "Edge[" << edge.idx() << "]";
     return d.space();
