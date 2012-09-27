@@ -20,6 +20,7 @@ SUBDIRS += surfacemesh_filter_normalize
 #SUBDIRS += surfacemesh_decorate_normals
 #SUBDIRS += surfacemesh_filter_au_skeleton
 SUBDIRS += surfacemesh_geodesic_distance
+SUBDIRS += surfacemesh_filter_ballpivoting
 
 # Mode Plugins
 SUBDIRS += surfacemesh_mode_info

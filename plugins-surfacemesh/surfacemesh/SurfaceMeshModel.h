@@ -40,4 +40,8 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Model, public Surface
         SurfaceMeshForEachFaceHelper faces();
         SurfaceMeshForEachOneRingEdgesHelper onering_hedges(Vertex v);
     /// @}
+
+	/// @{ Extra exposed functionality
+		void remove_vertex(Vertex v);
+	/// @}
 };

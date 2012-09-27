@@ -1,6 +1,7 @@
 #include <QMouseEvent>
 #include "surfacemesh_mode_info.h"
 #include "StarlabDrawArea.h"
+#include "FindDialog.h"
 #include "float.h"
 #include <qgl.h>
 
@@ -51,8 +52,12 @@ void surfacemesh_mode_info::drawWithNames()
     foreach(const Vertex vit, mesh()->vertices()){
 		i = i + 1;
 
-		Face f = mesh()->face(mesh()->halfedge(vit));
-		if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
+		Halfedge he = mesh()->halfedge(vit);
+		if(he.is_valid())
+		{
+			Face f = mesh()->face(he);
+			if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
+		}
 
 		Vector3 v = points[vit];
         glPushName(i);
@@ -93,32 +98,42 @@ void surfacemesh_mode_info::drawWithNames()
 	}
 }
 
+int surfacemesh_mode_info::correctIndex(int i)
+{
+    int nv = mesh()->n_vertices();
+    int nf = mesh()->n_faces();
+    int ne = mesh()->n_edges();
+
+    // Find actual index
+    if(i < nv)
+        selectedType = VERT_IDX;
+    else if(i < nv + nf){
+        selectedType = FACE_IDX;
+        i -= nv;
+    }
+    else if(i < nv + nf + ne){
+        selectedType = EDGE_IDX;
+        i -= (nv + nf);
+    }
+
+    return i;
+}
+
 void surfacemesh_mode_info::postSelection(const QPoint& p)
 {
 	Q_UNUSED(p);
 
-	int nv = mesh()->n_vertices();
-	int nf = mesh()->n_faces();
-	int ne = mesh()->n_edges();
-
-	// Find actual index
-	int i = drawArea()->selectedName();
-	if(i < nv)
-		selectedType = VERT_IDX;
-	else if(i < nv + nf){
-		selectedType = FACE_IDX;
-		i -= nv;
-	}
-	else if(i < nv + nf + ne){
-		selectedType = EDGE_IDX;
-		i -= (nv + nf);
-	}
-
-	selectedIdx = i;
+    selectedIdx = correctIndex( drawArea()->selectedName() );
 }
 
 void surfacemesh_mode_info::decorate()
 {
+    // Bound check on selected
+    if(selectedType == VERT_IDX) qMin(selectedIdx, (int)mesh()->n_vertices());
+    if(selectedType == FACE_IDX) qMin(selectedIdx, (int)mesh()->n_faces());
+    if(selectedType == EDGE_IDX) qMin(selectedIdx, (int)mesh()->n_edges());
+    if(selectedType == HDGE_IDX) qMin(selectedIdx, (int)mesh()->n_halfedges());
+
 	if(selectedIdx < 0)
 	{
 		// Draw visible visualizations on entire mesh
@@ -158,8 +173,12 @@ void surfacemesh_mode_info::drawIndex(DrawElementType indexType, QColor color, d
 	case VERT_IDX:
 		foreach(const Vertex v, mesh()->vertices())
 		{
-			Face f = mesh()->face(mesh()->halfedge(v));
-			if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
+            if(mesh()->valence(v))
+            {
+                Face f = mesh()->face(mesh()->halfedge(v));
+                if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
+            }
+
 			drawIndexVertex(v);
 		}
 		break;
@@ -264,20 +283,23 @@ void surfacemesh_mode_info::drawSelectedItem()
 			Vec proj = cameraProjection(points[v]);
 
 			// Draw spokes
-			Surface_mesh::Halfedge_around_vertex_circulator adjE(mesh(), v), eend = adjE;
-			glColor4d(0,1,0,1);
-			glLineWidth(3.0);
-			glDisable(GL_DEPTH_TEST);
-			glBegin(GL_LINES);
-			do { 
-				Edge e = mesh()->edge(adjE);
-				QVector3D p1 = points[mesh()->vertex(e,0)];
-				QVector3D p2 = points[mesh()->vertex(e,1)];
-				glVertex3d(p1.x(), p1.y(), p1.z());
-				glVertex3d(p2.x(), p2.y(), p2.z());
-			} while(++adjE != eend);
-			glEnd();
-			glEnable(GL_DEPTH_TEST);
+            if(mesh()->valence(v))
+            {
+                Surface_mesh::Halfedge_around_vertex_circulator adjE(mesh(), v), eend = adjE;
+                glColor4d(0,1,0,1);
+                glLineWidth(3.0);
+                glDisable(GL_DEPTH_TEST);
+                glBegin(GL_LINES);
+                do {
+                    Edge e = mesh()->edge(adjE);
+                    QVector3D p1 = points[mesh()->vertex(e,0)];
+                    QVector3D p2 = points[mesh()->vertex(e,1)];
+                    glVertex3d(p1.x(), p1.y(), p1.z());
+                    glVertex3d(p2.x(), p2.y(), p2.z());
+                } while(++adjE != eend);
+                glEnd();
+                glEnable(GL_DEPTH_TEST);
+            }
 
 			// Draw circle
 			double radius = 12;
@@ -296,26 +318,29 @@ void surfacemesh_mode_info::drawSelectedItem()
 			glColor4d(1,0.2,0.2,1);
 			drawIndexVertex(v);
 
-			// Draw adjacent vertices
-			glColor4d(1,1,1,1);
-			Surface_mesh::Vertex_around_vertex_circulator adjV(mesh(), v), vend = adjV;
-			do { drawIndexVertex(adjV); } while(++adjV != vend);
+            if(mesh()->valence(v))
+            {
+                // Draw adjacent vertices
+                glColor4d(1,1,1,1);
+                Surface_mesh::Vertex_around_vertex_circulator adjV(mesh(), v), vend = adjV;
+                do { drawIndexVertex(adjV); } while(++adjV != vend);
 
-			// Draw adjacent faces
-			glColor4d(0,1,0.5,1);
-			Surface_mesh::Face_around_vertex_circulator adjF(mesh(), v), fend = adjF;
-			do { drawIndexFace(adjF); } while(++adjF != fend);
+                // Draw adjacent faces
+                glColor4d(0,1,0.5,1);
+                Surface_mesh::Face_around_vertex_circulator adjF(mesh(), v), fend = adjF;
+                do { drawIndexFace(adjF); } while(++adjF != fend);
 
-			// Draw adjacent edges
-			glColor4d(0,0,0.6,1);
-			adjE = eend;
-			do { 
-				Edge e = mesh()->edge(adjE);
-				QVector3D p1 = points[mesh()->vertex(e,0)];
-				QVector3D p2 = points[mesh()->vertex(e,1)];
-				QVector3D c = (p1 + p2) * 0.5;
-				drawIndexEdge(e.idx(), c); 
-			} while(++adjE != eend);
+                // Draw adjacent edges
+                glColor4d(0,0,0.6,1);
+                Surface_mesh::Halfedge_around_vertex_circulator adjE(mesh(), v), eend = adjE;
+                do {
+                    Edge e = mesh()->edge(adjE);
+                    QVector3D p1 = points[mesh()->vertex(e,0)];
+                    QVector3D p2 = points[mesh()->vertex(e,1)];
+                    QVector3D c = (p1 + p2) * 0.5;
+                    drawIndexEdge(e.idx(), c);
+                } while(++adjE != eend);
+            }
 
 			endDrawIndex();
 			glDisable(GL_LIGHTING);
@@ -586,6 +611,17 @@ qglviewer::Vec surfacemesh_mode_info::cameraProjection( QVector3D c )
 bool surfacemesh_mode_info::keyPressEvent( QKeyEvent* event )
 {
 	bool used = false;
+
+    // User select by number
+    if(event->key() == Qt::Key_S)
+    {
+        FindDialog findDialog(mesh()->n_vertices(), mesh()->n_faces());
+        findDialog.exec();
+
+        selectedIdx = correctIndex( findDialog.index );
+
+        used = true;
+    }
 
 	if(event->key() == Qt::Key_V) { 
 		visualize[VERT_IDX] = !visualize[VERT_IDX]; 
