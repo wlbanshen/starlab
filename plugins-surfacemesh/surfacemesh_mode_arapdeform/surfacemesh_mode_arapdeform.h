@@ -3,7 +3,7 @@
 #include "SurfaceMeshPlugins.h"
 #include "SurfaceMeshHelper.h"
 
-#include "arap_dialog.h"
+#include "arap_widget.h"
 #include "ARAPDeformer.h"
 #include "ARAPDeformerHandle.h"
 
@@ -41,7 +41,7 @@ public:
     bool keyPressEvent(QKeyEvent *);
 
 private:
-    arap_dialog * dialog;
+    arap_widget * widget;
     QCursor paint_cursor, erase_cursor, deform_cursor;
     QPoint cursorPos;
     int brushSize;

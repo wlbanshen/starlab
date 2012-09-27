@@ -1,13 +1,10 @@
-#include "arap_dialog.h"
-#include "ui_arap_dialog.h"
+#include "arap_widget.h"
+#include "ui_arap_widget.h"
 #include "surfacemesh_mode_arapdeform.h"
 
-arap_dialog::arap_dialog(surfacemesh_mode_arapdeform * m, QWidget *parent) : QDialog(parent), ui(new Ui::arap_dialog)
+arap_widget::arap_widget(surfacemesh_mode_arapdeform * m) : ui(new Ui::arap_widget)
 {
     ui->setupUi(this);
-
-    /// Stay on top
-    setWindowFlags(Qt::WindowStaysOnTopHint);
 
     this->mode = m;
 
@@ -22,10 +19,9 @@ arap_dialog::arap_dialog(surfacemesh_mode_arapdeform * m, QWidget *parent) : QDi
     ui->anchorModes->setId(ui->distanceAnchor, GEODESIC_DISTANCE);
 
     connect(ui->anchorModes, SIGNAL(buttonClicked(int)), SLOT(anchorModeChanged(int)));
-
 }
 
-void arap_dialog::anchorModeChanged(int newMode)
+void arap_widget::anchorModeChanged(int newMode)
 {
     switch((ANCHOR_MODE) newMode)
     {
@@ -41,7 +37,7 @@ void arap_dialog::anchorModeChanged(int newMode)
     }
 }
 
-arap_dialog::~arap_dialog()
+arap_widget::~arap_widget()
 {
     delete ui;
 }

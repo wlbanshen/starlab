@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>arap_dialog</class>
- <widget class="QDialog" name="arap_dialog">
+ <class>arap_widget</class>
+ <widget class="QWidget" name="arap_widget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>172</height>
+    <height>175</height>
    </rect>
   </property>
   <property name="windowTitle">

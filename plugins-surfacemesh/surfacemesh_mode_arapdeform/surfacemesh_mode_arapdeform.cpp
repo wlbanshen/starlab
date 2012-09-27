@@ -5,8 +5,7 @@
 
 surfacemesh_mode_arapdeform::surfacemesh_mode_arapdeform()
 {
-    dialog = new arap_dialog(this);
-
+    this->widget = NULL;
     this->deformer = NULL;
     this->deform_handle = NULL;
 
@@ -24,7 +23,13 @@ surfacemesh_mode_arapdeform::surfacemesh_mode_arapdeform()
 
 void surfacemesh_mode_arapdeform::create()
 {
-    dialog->show();
+    if(!widget)
+    {
+        ModePluginDockWidget * dockwidget = new ModePluginDockWidget(mainWindow());
+        widget = new arap_widget(this);
+        dockwidget->setWidget(widget);
+        mainWindow()->addDockWidget(Qt::RightDockWidgetArea,dockwidget);
+    }
 
     update();
 }
