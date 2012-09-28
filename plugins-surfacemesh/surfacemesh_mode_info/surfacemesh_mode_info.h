@@ -15,6 +15,7 @@ class surfacemesh_mode_info : public SurfaceMeshModePlugin{
     /// Functions part of the EditPlugin system
     void create();
     void destroy(){}
+    bool documentChanged();
 
     void decorate();
     void drawWithNames();
