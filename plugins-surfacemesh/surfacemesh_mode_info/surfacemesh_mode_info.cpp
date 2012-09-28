@@ -12,9 +12,16 @@ using namespace qglviewer;
 
 void surfacemesh_mode_info::create()
 {
-	update();
-
     fontImage = QImage(":/images/font.png");
+
+    update();
+}
+
+bool surfacemesh_mode_info::documentChanged()
+{
+    update();
+
+    return true;
 }
 
 void surfacemesh_mode_info::update()
@@ -128,6 +135,8 @@ void surfacemesh_mode_info::postSelection(const QPoint& p)
 
 void surfacemesh_mode_info::decorate()
 {
+    if(document()->isBusy()) return;
+
     // Bound check on selected
     if(selectedType == VERT_IDX) qMin(selectedIdx, (int)mesh()->n_vertices());
     if(selectedType == FACE_IDX) qMin(selectedIdx, (int)mesh()->n_faces());

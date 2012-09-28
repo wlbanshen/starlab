@@ -18,6 +18,7 @@ void surfacemesh_render_wireframe::init(){
 }
 
 void surfacemesh_render_wireframe::render(){
+    glDisable(GL_LIGHTING);
 
 /// @todo Much faster but does not support color...YET
 #ifdef TODO_WIREFRAME_VBUFFER
@@ -26,7 +27,6 @@ void surfacemesh_render_wireframe::render(){
     gl::glVertexPointer(points.data());
     glEnableClientState(GL_VERTEX_ARRAY);
     /// Render
-    glDisable(GL_LIGHTING);
     glColor3f(0.0, 0.0, 0.0);
     glDepthRange(0.0, 1.0);
     glDepthFunc(GL_LEQUAL);
@@ -36,7 +36,6 @@ void surfacemesh_render_wireframe::render(){
     Surface_mesh::Vertex_property<Point> points = mesh()->vertex_property<Point>("v:point");
 	Surface_mesh::Edge_property<Color> ecolor = mesh()->get_edge_property<Color>("e:color");
 	bool has_edge_color = mesh()->has_edge_property<Color>("e:color");
-	glDisable(GL_LIGHTING);
 	glBegin(GL_LINES);
 	Surface_mesh::Edge_iterator eit, eend=mesh()->edges_end();
 	for (eit=mesh()->edges_begin(); eit!=eend; ++eit){
@@ -52,9 +51,10 @@ void surfacemesh_render_wireframe::render(){
 		gl::glVertex(points[v0]);
 		gl::glVertex(points[v1]);
 	}
-	glEnd();
-	glEnable(GL_LIGHTING);
+    glEnd();
 #endif
+
+    glEnable(GL_LIGHTING);
 }
 
 Q_EXPORT_PLUGIN(surfacemesh_render_wireframe)

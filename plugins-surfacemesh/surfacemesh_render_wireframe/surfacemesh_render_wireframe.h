@@ -14,7 +14,7 @@ private:
 public: 
     RenderPlugin* factory(){ return new surfacemesh_render_wireframe(); }
     QString name() { return "Wireframe"; }
-    // QIcon icon(){ return QIcon(":/surfacemesh_render_wireframe.png"); }
+    QIcon icon(){ return QIcon(":/surfacemesh_render_wireframe.png"); }
     void init();
     void render();
 };
