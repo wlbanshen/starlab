@@ -1,14 +1,14 @@
-#include "geodistance.h"
+#include "surfacemesh_filter_geoheat.h"
 #include "StarlabDrawArea.h"
 #include "GeoDrawObjects.h"
 
-void geodistance::initParameters(RichParameterSet *pars)
+void surfacemesh_filter_geoheat::initParameters(RichParameterSet *pars)
 {
     pars->addParam(new RichInt("sourceVertex", 0, "Source vertex"));
     pars->addParam(new RichBool("visualizeDistance", true, "Visualize Distance"));
 }
 
-void geodistance::precompute()
+void surfacemesh_filter_geoheat::precompute()
 {
     h   = new GeoHeatHelper( mesh() );
     A   = h->A();
@@ -19,7 +19,7 @@ void geodistance::precompute()
     poisson_solver.compute( Lc );
 }
 
-void geodistance::applyFilter(RichParameterSet *pars)
+void surfacemesh_filter_geoheat::applyFilter(RichParameterSet *pars)
 {
     QSet<Vertex> src;
     if(pars)
@@ -49,7 +49,7 @@ void geodistance::applyFilter(RichParameterSet *pars)
     }
 }
 
-ScalarVertexProperty geodistance::uniformDistance(const QSet<Vertex> & source)
+ScalarVertexProperty surfacemesh_filter_geoheat::uniformDistance(const QSet<Vertex> & source)
 {
     if(!h) precompute();
 
@@ -69,4 +69,4 @@ ScalarVertexProperty geodistance::uniformDistance(const QSet<Vertex> & source)
     return h->unifromDistance();
 }
 
-Q_EXPORT_PLUGIN(geodistance)
+Q_EXPORT_PLUGIN(surfacemesh_filter_geoheat)
