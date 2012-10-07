@@ -1,6 +1,7 @@
 #include "SurfaceMeshHelper.h"
 #include "manipulatedFrame.h"
 using namespace qglviewer;
+using namespace SurfaceMeshTypes;
 
 class ARAPDeformerHandle: public ManipulatedFrame{
     Q_OBJECT

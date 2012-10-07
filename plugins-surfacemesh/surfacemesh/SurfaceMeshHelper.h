@@ -4,7 +4,6 @@
 #include "SurfaceMeshTypes.h"
 #include "helpers/SurfaceMeshQForEachHelpers.h"
 
-using namespace SurfaceMeshTypes;
 using namespace std;
 
 /// Simplified access to property types and store names of defined properties
@@ -34,7 +33,7 @@ namespace SurfaceMeshTypes{
 	typedef Surface_mesh::Face_property<bool>       BoolFaceProperty;
     typedef Surface_mesh::Edge_property<Scalar>     ScalarEdgeProperty;    
     typedef Surface_mesh::Halfedge_property<Scalar> ScalarHalfedgeProperty;
-}
+
 
 class SurfaceMeshHelper{
 protected:
@@ -173,3 +172,5 @@ public:
         QString type(){ return "Missing Property"; }
     };
 };
+
+}

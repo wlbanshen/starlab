@@ -19,37 +19,37 @@ class surfacemesh_mode_info : public SurfaceMeshModePlugin{
 
     void decorate();
     void drawWithNames();
-	void postSelection(const QPoint& p);
-	void endSelection(const QPoint& p);
+    void postSelection(const QPoint& p);
+    void endSelection(const QPoint& p);
 
-	void drawIndex(DrawElementType, QColor, double vt = -0.4);
+    void drawIndex(DrawElementType, QColor, double vt = -0.4);
 
-	void beginDrawIndex();
-	void drawIndexVertex(Vertex,bool shadow=false);
-	void drawIndexFace(Face,bool shadow=false);
-	void drawIndexEdge(int,QVector3D,bool shadow=false);
-	void endDrawIndex();
+    void beginDrawIndex();
+    void drawIndexVertex(Vertex,bool shadow=false);
+    void drawIndexFace(Face,bool shadow=false);
+    void drawIndexEdge(int,QVector3D,bool shadow=false);
+    void endDrawIndex();
 
-	void drawSelectedItem();
-	void drawItemInfo();
+    void drawSelectedItem();
+    void drawItemInfo();
 
-	qglviewer::Vec cameraProjection(QVector3D);
+    qglviewer::Vec cameraProjection(QVector3D);
 
-	Vector3VertexProperty points;
-	Vector3FaceProperty faceCenters;
-	Vector3FaceProperty faceNormals;
-	ScalarFaceProperty faceAreas;
-	ScalarEdgeProperty elengs;
+    Vector3VertexProperty points;
+    Vector3FaceProperty faceCenters;
+    Vector3FaceProperty faceNormals;
+    ScalarFaceProperty faceAreas;
+    ScalarEdgeProperty elengs;
 
-	DrawElementType selectedType;
+    DrawElementType selectedType;
     int selectedIdx;
     int correctIndex(int i);
 
-	QVector<bool> visualize;
+    QVector<bool> visualize;
 
 public:
-	virtual bool keyReleaseEvent(QKeyEvent* event);
-	virtual bool keyPressEvent (QKeyEvent* event);
+    virtual bool keyReleaseEvent(QKeyEvent* event);
+    virtual bool keyPressEvent (QKeyEvent* event);
     void update();
 };
 

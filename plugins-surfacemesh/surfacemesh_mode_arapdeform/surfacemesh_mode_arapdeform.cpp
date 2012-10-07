@@ -1,4 +1,5 @@
 #include <QMouseEvent>
+#include "interfaces/ModePluginDockWidget.h"
 #include "surfacemesh_mode_arapdeform.h"
 #include "StarlabDrawArea.h"
 #include "arap_globals.h"

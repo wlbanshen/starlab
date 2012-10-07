@@ -9,15 +9,15 @@
 
 namespace CurveskelTypes{
 
-class Base_property_array
+class Wingedge_Base_property_array
 {
 public:
 
     /// Default constructor
-    Base_property_array(const std::string& name) : name_(name) {}
+    Wingedge_Base_property_array(const std::string& name) : name_(name) {}
 
     /// Destructor.
-    virtual ~Base_property_array() {}
+    virtual ~Wingedge_Base_property_array() {}
 
     /// Reserve memory for n elements.
     virtual void reserve(size_t n) = 0;
@@ -35,7 +35,7 @@ public:
     virtual void swap(size_t i0, size_t i1) = 0;
 
     /// Return a deep copy of self.
-    virtual Base_property_array* clone () const = 0;
+    virtual Wingedge_Base_property_array* clone () const = 0;
 
     /// Return the name of the property
     const std::string& name() const { return name_; }
@@ -52,7 +52,7 @@ protected:
 
 
 template <class T>
-class WingedgeProperty_array : public Base_property_array
+class WingedgeProperty_array : public Wingedge_Base_property_array
 {
 public:
 
@@ -61,7 +61,7 @@ public:
     typedef typename vector_type::reference         reference;
     typedef typename vector_type::const_reference   const_reference;
 
-    WingedgeProperty_array(const std::string& name, T t=T()) : Base_property_array(name), value_(t) {}
+    WingedgeProperty_array(const std::string& name, T t=T()) : Wingedge_Base_property_array(name), value_(t) {}
 
 
 public: // virtual interface of Base_property_array
@@ -93,7 +93,7 @@ public: // virtual interface of Base_property_array
         data_[i1]=d;
     }
 
-    virtual Base_property_array* clone() const
+    virtual Wingedge_Base_property_array* clone() const
     {
         WingedgeProperty_array<T>* p = new WingedgeProperty_array<T>(name_, value_);
         p->data_ = data_;
@@ -311,7 +311,7 @@ public:
     // delete a property
     template <class T> void remove(WingedgeProperty<T>& h)
     {
-        std::vector<Base_property_array*>::iterator it=parrays_.begin(), end=parrays_.end();
+        std::vector<Wingedge_Base_property_array*>::iterator it=parrays_.begin(), end=parrays_.end();
         for (; it!=end; ++it)
         {
             if (*it == h.parray_)
@@ -374,7 +374,7 @@ public:
 
 
 private:
-    std::vector<Base_property_array*>  parrays_;
+    std::vector<Wingedge_Base_property_array*>  parrays_;
     size_t  size_;
 };
 
@@ -936,7 +936,7 @@ public: //--------------------------------------------------- memory management
         fprops_.reserve(nfaces);
     }
 
-    /// remove deleted vertices/edges/faces
+    /// remove deleted vertices/edges/[faces: not implemented]
     void garbage_collection()
 	{
         std::map<int, int> points;
@@ -970,10 +970,13 @@ public: //--------------------------------------------------- memory management
         // Remove old records
         clear();
 
-        // Add clean structure
+        // Add clean structure:
+
+		// Vertices
         for(unsigned int i = 0; i < points_pos.size(); i++)
             this->add_vertex(points_pos[i]);
 
+		// Edges
         for(unsigned int i = 0; i < edges.size(); i++)
             this->add_edge(Vertex(edges[i].first), Vertex(edges[i].second));
     }
@@ -1298,8 +1301,13 @@ public: //--------------------------------------------- higher-level operations
 		// remove edge
 		remove_edge(e);
 	}
-
     /// @}
+
+    unsigned int valence(Vertex v) const
+    {
+        return vconn_[v].edges_.size();
+    }
+
 
 public: //------------------------------------------ geometry-related functions
 

@@ -33,8 +33,8 @@ private:
 
 	// Frequently used
 	int nVerts;
-    Surface_mesh::Vertex_property<Point> points;
-	Surface_mesh::Vertex_property<Normal> normals;
+    Surface_mesh::Vertex_property<Surface_mesh::Point> points;
+    Surface_mesh::Vertex_property<Surface_mesh::Normal> normals;
 	Surface_mesh::Vertex_iterator vit, vend;
 	Surface_mesh::Vertex_property< std::map<Surface_mesh::Vertex, double> > wij_weight;
 	Surface_mesh::Vertex_property< bool > isAnchorPoint, isControlPoint;
@@ -75,15 +75,15 @@ public:
 		ClearControl();
 	}
 
-    Halfedge find_halfedge(Vertex start, Vertex end){
-        Halfedge h  = mesh->halfedge(start);
-        const Halfedge hh = h;
+    Surface_mesh::Halfedge find_halfedge(Surface_mesh::Vertex start, Surface_mesh::Vertex end){
+        Surface_mesh::Halfedge h  = mesh->halfedge(start);
+        const Surface_mesh::Halfedge hh = h;
         if (h.is_valid()){
             do{
                 if (mesh->to_vertex(h) == end)return h;
                 h = mesh->cw_rotated_halfedge(h);
             } while (h != hh);
         }
-        return Halfedge();
+        return Surface_mesh::Halfedge();
     }
 };

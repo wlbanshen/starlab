@@ -4,6 +4,8 @@
 #include "interfaces/FilterPlugin.h"
 #include "interfaces/RenderPlugin.h"
 
+using namespace CurveskelTypes;
+
 /// Make this function valid only in this file
 namespace{
     bool isA(Model* model){

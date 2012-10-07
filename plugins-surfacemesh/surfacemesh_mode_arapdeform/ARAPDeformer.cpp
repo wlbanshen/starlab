@@ -1,4 +1,5 @@
 #include "ARAPDeformer.h"
+using namespace SurfaceMeshTypes;
 
 ARAPDeformer::ARAPDeformer(Surface_mesh * usingMesh)
 {

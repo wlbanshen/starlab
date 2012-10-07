@@ -7,25 +7,31 @@
 #include "Model.h"
 #include "CurveskelTypes.h"
 
-/// @{ Forward declaration of helpers defined in helper/...
-///    This reduces clutter of this class header
-class CurveskelForEachVertexHelper;
-class CurveskelForEachEdgeHelper;
-/// @}
-
-using namespace CurveskelTypes;
-
-class EXPORT CurveskelModel : public Model, public CurveskelTypes::MyWingedMesh{
-    Q_OBJECT
-    Q_INTERFACES(Model)
-   
-public:
-    CurveskelModel(QString path, QString name=QString());
-    void updateBoundingBox();
-    
-    /// @{ Qt foreach helpers
-    public:
-        CurveskelForEachVertexHelper vertices();
-        CurveskelForEachEdgeHelper edges();
+namespace CurveskelTypes
+{
+    /// @{ Forward declaration of helpers defined in helper/...
+    ///    This reduces clutter of this class header
+    class CurveskelForEachVertexHelper;
+    class CurveskelForEachEdgeHelper;
     /// @}
-};
+
+    class EXPORT CurveskelModel : public Model, public CurveskelTypes::MyWingedMesh{
+        Q_OBJECT
+        Q_INTERFACES(Model)
+
+    public:
+        CurveskelModel(QString path=QString(), QString name=QString());
+        void updateBoundingBox();
+
+        /// @{ Qt foreach helpers
+        public:
+            CurveskelForEachVertexHelper vertices();
+            CurveskelForEachEdgeHelper edges();
+        /// @}
+
+        std::set<Vertex> junctions();
+
+		std::set<Vertex> adjacent_set(Vertex v);
+		Vertex other_vertex(Edge e, Vertex v);
+    };
+}
