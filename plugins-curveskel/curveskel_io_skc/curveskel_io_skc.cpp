@@ -9,7 +9,6 @@ using namespace CurveskelTypes;
 Model* curveskel_io_skc::open(QString path){
     QString name = pathToName(path);
     CurveskelModel* model = new CurveskelModel(path,name);
-    checkValidPath(path);
     
     string inputLine;
     ifstream file( qPrintable(path) );
