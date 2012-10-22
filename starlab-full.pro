@@ -1,6 +1,3 @@
-TEMPLATE = subdirs
-CONFIG += ordered
-
 #--- Setup the global paths
 TEMPLATE = subdirs
 CONFIG += ordered
@@ -10,3 +7,4 @@ SUBDIRS += starlab-core
 
 # We are loading the surfacemesh basics
 SUBDIRS += starlab-surfacemesh
+
