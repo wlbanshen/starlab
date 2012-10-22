@@ -1,8 +1,12 @@
-system(qmake -set BUILD_PATH $$OUT_PWD) #for Windows, any better way?
-
 TEMPLATE = subdirs
 CONFIG += ordered
 
+#--- Setup the global paths
+TEMPLATE = subdirs
+CONFIG += ordered
+
+# We are loading the full core
 SUBDIRS += starlab-core
-SUBDIRS += plugins-surfacemesh
-SUBDIRS += plugins-curveskel
+
+# We are loading the surfacemesh basics
+SUBDIRS += starlab-surfacemesh
