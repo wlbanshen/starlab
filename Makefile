@@ -1,6 +1,9 @@
-all: config clear download open
+help:
+	@echo - help: 	this help
+	@echo - init: 	fresh checkout (WARNING: deleted everything)
+	@echo - make: 	builds from sources
 
-config:
+fresh:  clear download open
 
 download: 
 	git clone https://code.google.com/p/starlab.core core
@@ -21,3 +24,8 @@ ifeq ($(OS),Windows_NT)
 else
 	open starlab_mini.pro
 endif
+
+make:
+	mkdir -p ../starlab_build
+	cd ../starlab_build; qmake ../starlab/starlab_mini.pro
+	cd ../starlab_build; make -j8
