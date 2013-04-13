@@ -18,8 +18,8 @@ SUBDIRS += core
 #-------------------------------------------------------------------------------
 #                           ADVANCED CORE PLUGINS
 #-------------------------------------------------------------------------------
-SUBDIRS += core/plugins/gui_python
-SUBDIRS += plugins/project_io_starlab
+#SUBDIRS += core/plugins/gui_python
+#SUBDIRS += plugins/project_io_starlab
 
 #-------------------------------------------------------------------------------
 #                               SURFACEMESH   
@@ -41,6 +41,7 @@ SUBDIRS += surfacemesh/surfacemesh_filter_normalize
 SUBDIRS += surfacemesh/surfacemesh_filter_geoheat
 #SUBDIRS += surfacemesh/surfacemesh_filter_ballpivoting
 #SUBDIRS += surfacemesh/surfacemesh_filter_au_skeleton
+SUBDIRS += surfacemesh/surfacemesh_filter_depthscan
 #--- Mode Plugins
 SUBDIRS += surfacemesh/surfacemesh_mode_info
 SUBDIRS += surfacemesh/surfacemesh_mode_arapdeform
