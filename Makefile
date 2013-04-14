@@ -1,7 +1,7 @@
 help:
-	@echo - help: 	this help
-	@echo - init: 	fresh checkout (WARNING: deleted everything)
-	@echo - make: 	builds from sources
+	@echo "- help 	this help"
+	@echo "- init 	fresh checkout (WARNING: deleted everything)"
+	@echo "- make 	builds from sources"
 
 fresh:  clear download open
 
