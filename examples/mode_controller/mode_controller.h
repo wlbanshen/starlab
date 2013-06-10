@@ -10,8 +10,8 @@ class mode_controller : public ControllerModePlugin{
     bool isApplicable(){ return true; }
 
     void create(){
-        controllers() << new FrameController( Vector3(.5,.5,0) );
-        controllers() << new FrameController( Vector3(-.5,0,.4) );
+        controllers() << FrameController::New( Vector3(.5,.5,0) ).scale(.5);
+        controllers() << FrameController::New( Vector3(-.5,0,.4) ).scale(1.5);
         
         /// Example on how to connect them
         FrameController* conncontr = new FrameController( Vector3(0,0,0) );
